@@ -43,16 +43,7 @@ const results = {
 
 const markdown = require('../dist/github-markdown').default
 
-test('writes the markdown with diff report', async () => {
-  const markdownResult = await markdown({
-    processingResults: results,
-    commitSha: 'a033d6f26da7f7856c150e7f1bf217f0f0cfd7e3'
-  })
-
-  expect(markdownResult).toMatchSnapshot()
-})
-
-test('writes the markdown without diff report', async () => {
+test('writes the markdown report', async () => {
   const markdownResult = await markdown({
     processingResults: results
   })

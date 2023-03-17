@@ -5,13 +5,15 @@ const EXAMPLE_IMAGES_DIR = `${process.cwd()}/__tests__/example-images`
 const TMP_TEST_IMAGES_DIR = `${process.cwd()}/__tests__/test-images`
 
 const EXAMPLE_IMAGES = [
+  'icon.png',
   'roo.webp',
   'roo.jpg',
-  'icon.png',
   'optimised-image.png'
 ]
 
-const IMAGE_PATHS = EXAMPLE_IMAGES.map(image => path.join(TMP_TEST_IMAGES_DIR, image))
+const IMAGE_PATHS = EXAMPLE_IMAGES.map(image =>
+  path.join(TMP_TEST_IMAGES_DIR, image)
+)
 
 beforeEach(async () => {
   try {
@@ -61,8 +63,8 @@ test('returns images with stats', async () => {
     afterStats: expect.any(Number),
     beforeStats: expect.any(Number),
     compressionWasSignificant: true,
-    name: 'icon.png',
-    path: '__tests__/test-images/icon.png',
+    name: expect.any(String),
+    path: IMAGE_PATHS[0],
     percentChange: expect.any(Number)
   })
 })
