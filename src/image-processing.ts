@@ -1,15 +1,14 @@
-import { stat, writeFile } from 'fs/promises'
+import { statSync, writeFileSync } from 'fs'
 import path from 'path'
 import sharp from 'sharp'
 
-import {
-  REPO_DIRECTORY,
-  EXTENSION_TO_SHARP_FORMAT_MAPPING,
-} from './constants'
+import { REPO_DIRECTORY, EXTENSION_TO_SHARP_FORMAT_MAPPING } from './constants'
 
 import getConfig from './config'
 
-const processImages = async (imagePaths: string[]): Promise<ProcessedImagesResult> => {
+const processImages = async (
+  imagePaths: string[]
+): Promise<ProcessedImagesResult> => {
   console.log(
     'To turn on DEBUG level logging for image-actions, see this reference: https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging'
   )
@@ -33,7 +32,7 @@ const processImages = async (imagePaths: string[]): Promise<ProcessedImagesResul
     }
 
     const options = config[sharpFormat]
-    const beforeStats = (await stat(imgPath)).size
+    const beforeStats = statSync(imgPath).size
 
     try {
       const { data, info } = await sharp(imgPath)
@@ -66,7 +65,7 @@ const processImages = async (imagePaths: string[]): Promise<ProcessedImagesResul
 
       if (compressionWasSignificant) {
         // Only write if there was a worthwhile optimisation
-        await writeFile(imgPath, data)
+        writeFileSync(imgPath, data)
 
         // Add to optimisedImages array for reporting
         optimisedImages.push(processedImage)
