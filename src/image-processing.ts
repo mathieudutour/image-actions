@@ -1,20 +1,15 @@
-import util from 'util'
-import { promises as fsPromises } from 'fs'
-const { stat, writeFile } = fsPromises
+import { stat, writeFile } from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
-
-const glob = util.promisify(require('glob'))
 
 import {
   REPO_DIRECTORY,
   EXTENSION_TO_SHARP_FORMAT_MAPPING,
-  FILE_EXTENSIONS_TO_PROCESS
 } from './constants'
 
 import getConfig from './config'
 
-const processImages = async (): Promise<ProcessedImagesResult> => {
+const processImages = async (imagePaths: string[]): Promise<ProcessedImagesResult> => {
   console.log(
     'To turn on DEBUG level logging for image-actions, see this reference: https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging'
   )
@@ -23,19 +18,7 @@ const processImages = async (): Promise<ProcessedImagesResult> => {
   console.log('::debug::', sharp.format)
   console.log('::debug:: === Sharp library info ===')
 
-  const config = await getConfig()
-  const globPaths = `${REPO_DIRECTORY}/**/*.{${FILE_EXTENSIONS_TO_PROCESS.join(
-    ','
-  )}}`
-
-  const imagePaths = await glob(globPaths, {
-    ignore: config.ignorePaths.map((p: string) =>
-      path.resolve(REPO_DIRECTORY, p)
-    ),
-    nodir: true,
-    follow: false,
-    dot: true
-  })
+  const config = getConfig()
 
   const optimisedImages: ProcessedImage[] = []
   const unoptimisedImages: ProcessedImage[] = []
@@ -43,6 +26,12 @@ const processImages = async (): Promise<ProcessedImagesResult> => {
   for await (const imgPath of imagePaths) {
     const extension = path.extname(imgPath)
     const sharpFormat = EXTENSION_TO_SHARP_FORMAT_MAPPING[extension]
+
+    if (!sharpFormat) {
+      console.log('::warning::', imgPath, 'is not a supported image format')
+      continue
+    }
+
     const options = config[sharpFormat]
     const beforeStats = (await stat(imgPath)).size
 

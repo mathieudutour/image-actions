@@ -3,7 +3,6 @@ import crypto from 'crypto'
 import { GITHUB_REPOSITORY } from './constants'
 import githubEvent from './github-event'
 import template from './template'
-import getConfig from './config'
 
 const generateImageView = (
   images: ProcessedImage[],
@@ -48,13 +47,9 @@ const generateMarkdownReport = async ({
   commitSha
 }: ActionSummaryReport): Promise<string> => {
   const { number } = await githubEvent()
-  const { compressOnly } = await getConfig()
   const { optimisedImages, unoptimisedImages, metrics } = processingResults
 
-  const templateName: string =
-    commitSha && !compressOnly
-      ? 'inline-pr-comment-with-diff.md'
-      : 'pr-comment.md'
+  const templateName = 'pr-comment.md'
 
   const markdown = await template(templateName, {
     overallPercentageSaved: -metrics.percentChange.toFixed(1),

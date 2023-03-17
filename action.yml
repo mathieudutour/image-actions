@@ -1,12 +1,8 @@
 name: "Image Actions"
-author: "Calibre"
-description: "Compresses Images for the Web"
+author: "mathieudutour"
+description: "Compresses Images for the Raycast Extensions repo"
 
 inputs:
-  githubToken:
-    description: "GitHub Token"
-    required: true
-
   jpegQuality:
     description: "JPEG quality level"
     required: false
@@ -27,15 +23,9 @@ inputs:
     required: false
     default: "80"
 
-  ignorePaths:
-    description: "Paths to ignore during search"
-    required: false
-    default: "node_modules/**"
-
-  compressOnly:
-    description: "Images will be compressed. No commit, or comments will be added to your Pull Request"
-    required: false
-    default: "false"
+  images:
+    description: "Comma separated list of images to compress"
+    required: true
 
 outputs:
   markdown:
@@ -43,7 +33,7 @@ outputs:
 
 runs:
   using: "docker"
-  image: "docker://ghcr.io/calibreapp/image-actions/image-actions:main" 
+  image: "docker://ghcr.io/mathieudutour/image-actions/image-actions:main"
 
 branding:
   icon: "image"

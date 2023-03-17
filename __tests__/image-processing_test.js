@@ -11,6 +11,8 @@ const EXAMPLE_IMAGES = [
   'optimised-image.png'
 ]
 
+const IMAGE_PATHS = EXAMPLE_IMAGES.map(image => path.join(TMP_TEST_IMAGES_DIR, image))
+
 beforeEach(async () => {
   try {
     await fs.mkdir(TMP_TEST_IMAGES_DIR)
@@ -37,7 +39,7 @@ afterEach(async () => {
 const imageProcessing = require('../dist/image-processing').default
 
 test('returns metrics for images', async () => {
-  const results = await imageProcessing()
+  const results = await imageProcessing(IMAGE_PATHS)
 
   expect(results.metrics).toEqual({
     bytesSaved: expect.any(Number),
@@ -46,14 +48,14 @@ test('returns metrics for images', async () => {
 })
 
 test('returns the correct number of optimised/untouched images', async () => {
-  const results = await imageProcessing()
+  const results = await imageProcessing(IMAGE_PATHS)
 
   expect(results.optimisedImages).toHaveLength(2)
   expect(results.unoptimisedImages).toHaveLength(2)
 })
 
 test('returns images with stats', async () => {
-  const results = await imageProcessing()
+  const results = await imageProcessing(IMAGE_PATHS)
 
   expect(results.optimisedImages[0]).toEqual({
     afterStats: expect.any(Number),

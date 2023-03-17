@@ -1,5 +1,4 @@
-import { promises as fsPromises } from 'fs'
-const { readFile } = fsPromises
+import { readFile } from 'fs/promises'
 
 import { GITHUB_EVENT_PATH } from './constants'
 
