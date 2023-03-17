@@ -1,4 +1,4 @@
-import * as core from "@actions/core";
+import * as core from '@actions/core'
 
 import generateMarkdownReport from './github-markdown'
 import processImages from './image-processing'
@@ -7,14 +7,18 @@ const run = async (): Promise<void> => {
   console.log('->> Locating images…')
 
   const imagesPaths = core
-    .getInput("images", {
+    .getInput('images', {
       required: true,
-      trimWhitespace: true,
+      trimWhitespace: true
     })
-    .split(",")
-    .map((x) => x.trim());
+    .split(',')
+    .map(x => x.trim())
 
-  const processingResults: ProcessedImagesResult = await processImages(imagesPaths)
+  const processingResults: ProcessedImagesResult = await processImages(
+    imagesPaths
+  )
+
+  console.log(JSON.stringify(processingResults, null, 2))
 
   // If nothing was optimised, bail out.
   if (!processingResults.optimisedImages.length) {

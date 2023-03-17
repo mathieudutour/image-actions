@@ -20,7 +20,7 @@ const getConfig = () => {
     webp: { quality: WEBP_QUALITY }
   }
 
-  console.log('->> Using config:', JSON.stringify(config))
+  console.log('->> Using config:', JSON.stringify(config, null, '  '))
 
   return config
 }
