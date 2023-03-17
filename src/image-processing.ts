@@ -24,7 +24,8 @@ const processImages = async (
 
   for await (const imgPath of imagePaths) {
     const extension = path.extname(imgPath)
-    const sharpFormat = EXTENSION_TO_SHARP_FORMAT_MAPPING[extension]
+    const sharpFormat =
+      EXTENSION_TO_SHARP_FORMAT_MAPPING[extension.toLowerCase()]
 
     if (!sharpFormat) {
       console.log('::warning::', imgPath, 'is not a supported image format')
